@@ -1,0 +1,19 @@
+{
+  "name": "coct-aerial-imagery-leaflet",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "predev": "node scripts/download-fonts.mjs",
+    "dev": "vite",
+    "prebuild": "node scripts/download-fonts.mjs",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "leaflet": "^1.9.4"
+  },
+  "devDependencies": {
+    "vite": "^5.4.10"
+  }
+}
