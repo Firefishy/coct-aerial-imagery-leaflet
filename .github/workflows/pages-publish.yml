@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - Dockerfile
+      - .dockerignore
+      - .github/workflows/docker-publish.yml
   workflow_dispatch:
 
 permissions:
