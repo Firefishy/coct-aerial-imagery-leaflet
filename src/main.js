@@ -172,12 +172,35 @@ function setLayerOpacity(value, options = {}) {
 }
 
 function readUrlState() {
-  const params = new URLSearchParams(window.location.search);
-  const layer = params.get("layer");
-  const lat = Number.parseFloat(params.get("lat"));
-  const lng = Number.parseFloat(params.get("lng"));
-  const z = Number.parseFloat(params.get("z"));
-  const opacity = Number.parseFloat(params.get("opacity"));
+  const queryParams = new URLSearchParams(window.location.search);
+  const hash = window.location.hash.startsWith("#")
+    ? window.location.hash.slice(1)
+    : window.location.hash;
+  const hashParams = new URLSearchParams(hash);
+
+  const getParam = (...keys) => {
+    for (const key of keys) {
+      const fromQuery = queryParams.get(key);
+      if (fromQuery !== null) {
+        return fromQuery;
+      }
+    }
+
+    for (const key of keys) {
+      const fromHash = hashParams.get(key);
+      if (fromHash !== null) {
+        return fromHash;
+      }
+    }
+
+    return null;
+  };
+
+  const layer = getParam("layer");
+  const lat = Number.parseFloat(getParam("lat"));
+  const lng = Number.parseFloat(getParam("lon", "lng"));
+  const z = Number.parseFloat(getParam("zoom", "z"));
+  const opacity = Number.parseFloat(getParam("opacity"));
 
   return {
     layer: layer ? slugToLayer(layer) : null,
@@ -199,9 +222,11 @@ function writeUrlState() {
     params.delete("layer");
   }
   params.set("lat", center.lat.toFixed(6));
-  params.set("lng", center.lng.toFixed(6));
-  params.set("z", String(zoom));
+  params.set("lon", center.lng.toFixed(6));
+  params.set("zoom", String(zoom));
   params.set("opacity", state.opacity.toFixed(2));
+  params.delete("lng");
+  params.delete("z");
 
   const nextUrl = `${window.location.pathname}?${params.toString()}`;
   window.history.replaceState({}, "", nextUrl);

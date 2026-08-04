@@ -63,6 +63,12 @@ Run it locally:
 docker run --rm -p 8080:8080 coct-aerial-imagery-leaflet:test
 ```
 
+Or with Docker Compose (serves on http://localhost:8080):
+
+```bash
+docker compose up --build
+```
+
 ## Permalink Format
 
 The app updates URL query parameters as you interact with the map:
